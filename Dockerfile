@@ -24,3 +24,7 @@ RUN cmake -G "Unix Makefiles" \
 RUN make -j "$(nproc)"
 
 RUN make install
+
+FROM trzeci/emscripten
+COPY --from=0 /opt/llvm-wasm /opt/llvm-wasm
+RUN sed -ie 's/\/emsdk_portable\/llvm\/clang\/bin/\/opt\/llvm-wasm\/bin/g' /emsdk_portable/data/.config
