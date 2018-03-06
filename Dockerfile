@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM trzeci/emscripten
 
 RUN apt-get update && apt-get install -y \
   clang \
@@ -25,6 +25,9 @@ RUN make -j "$(nproc)"
 
 RUN make install
 
-FROM trzeci/emscripten
-COPY --from=0 /opt/llvm-wasm /opt/llvm-wasm
+RUN emsdk update && emsdk install latest
+RUN cp -RT /emsdk_portable/emscripten/*/system/ /emsdk_portable/sdk/system/
 RUN sed -ie 's/\/emsdk_portable\/llvm\/clang\/bin/\/opt\/llvm-wasm\/bin/g' /emsdk_portable/data/.config
+
+WORKDIR /src
+RUN mkdir tmp && cd tmp && touch a.c && emcc a.c && cd .. && rm -rf tmp
