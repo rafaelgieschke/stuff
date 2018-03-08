@@ -42,3 +42,5 @@ RUN rm -rf /emsdk_portable/data/.cache/
 
 WORKDIR /src
 RUN mkdir tmp && cd tmp && touch a.c && emcc a.c && cd .. && rm -rf tmp
+RUN apt-get update && apt-get install -y \
+  python-pyelftools
