@@ -1,0 +1,5 @@
+version: "2"
+services:
+  emscripten:
+    build: .
+    image: eaas/emscripten-wasm
