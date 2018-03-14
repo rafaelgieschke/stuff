@@ -1,7 +1,16 @@
 #!/bin/sh
 
-mkdir /tmp/powerdns
-cp /var/lib/powerdns/pdns.sqlite3 /tmp/powerdns/pdns.sqlite3
-chown pdns:pdns /tmp/powerdns /tmp/powerdns/pdns.sqlite3
+DB="/data/pdns.sqlite3"
+LOCALCONF="/data/pdns.local.conf"
+
+if ! test -e "$DB"; then
+    cp /var/lib/powerdns/pdns.sqlite3 "$DB"
+    chown pdns:pdns "$DB"
+fi
+
+if ! test -e "$LOCALCONF"; then
+    cp /etc/powerdns/pdns.local.conf.template "$LOCALCONF"
+    chown pdns:pdns "$LOCALCONF"
+fi
 
 exec pdns_server

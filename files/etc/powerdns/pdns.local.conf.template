@@ -1,0 +1,4 @@
+webserver=yes
+webserver-address=0.0.0.0
+api=yes
+api-key=changeme

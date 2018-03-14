@@ -10,6 +10,8 @@ services:
       - "8081:8081"
       - "54:53/udp"
       - "54:53/tcp"
+    volumes:
+      - ./data:/data
 
 # Update using:
 # curl -v -X PATCH -H 'X-API-Key: changeme' http://127.0.0.1:8081/api/v1/servers/localhost/zones/=2E -d '{"rrsets": [{"changetype": "REPLACE", "name": "abc.example.", "type": "A", "ttl": 10, "records": [{"content": "127.0.0.11", "disabled": false}] }]}'
