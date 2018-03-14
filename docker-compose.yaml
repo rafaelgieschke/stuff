@@ -1,0 +1,7 @@
+version: "2"
+services:
+  .:
+    image: eaas-http2
+    build: .
+    ports:
+      - 445:443
