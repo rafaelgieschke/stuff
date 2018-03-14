@@ -1,0 +1,7 @@
+#!/bin/sh
+
+mkdir /tmp/powerdns
+cp /var/lib/powerdns/pdns.sqlite3 /tmp/powerdns/pdns.sqlite3
+chown pdns:pdns /tmp/powerdns /tmp/powerdns/pdns.sqlite3
+
+exec pdns_server
