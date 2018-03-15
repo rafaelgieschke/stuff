@@ -27,7 +27,7 @@ RUN \
   git clone https://github.com/rafaelgieschke/acme.sh && \
   cd acme.sh && \
   ./acme.sh --install --force && \
-  true 3
+  true 5
 
 EXPOSE 53/udp 53/tcp
 EXPOSE 8081
