@@ -1,8 +1,0 @@
-#!/bin/sh
-
-. /etc/service/acme.sh/params
-
-while :; do
-    /root/.acme.sh/acme.sh --cron --home "/root/.acme.sh/"
-    sleep 3600
-done

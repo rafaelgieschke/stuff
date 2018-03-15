@@ -6,3 +6,5 @@ export PDNS_Token="$(awk -F= -- '$1 == "api-key" { print $2 }' /data/pdns.local.
 export PDNS_Ttl=60
 export Le_DNSSleep=5
 export DEPLOY_NGHTTPX_RELOAD="sv reload nghttpx"
+
+exec /root/.acme.sh/acme.sh "$@"
