@@ -11,7 +11,9 @@ fi
 
 if ! test -e "$LOCALCONF"; then
     cp /etc/powerdns/pdns.local.conf.template "$LOCALCONF"
-    echo "api-key=$(openssl rand -hex 32)" >> "$LOCALCONF"
+    KEY="$(openssl rand -hex 32)"
+    echo "api-key=$KEY" >> "$LOCALCONF"
+    echo "webserver-password=$KEY" >> "$LOCALCONF"
     chown pdns:pdns "$LOCALCONF"
 fi
 
