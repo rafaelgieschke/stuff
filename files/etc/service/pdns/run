@@ -1,11 +1,12 @@
 #!/bin/sh
 
-DB="/data/pdns.sqlite3"
+DB="/data/pdns/pdns.sqlite3"
 LOCALCONF="/data/pdns.local.conf"
 
 if ! test -e "$DB"; then
+    mkdir "$(dirname "$DB")"
     cp /var/lib/powerdns/pdns.sqlite3 "$DB"
-    chown pdns:pdns "$DB"
+    chown pdns:pdns "$(dirname "$DB")" "$DB"
 fi
 
 if ! test -e "$LOCALCONF"; then

@@ -16,7 +16,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 COPY files /
 
 RUN pdnsutil create-zone . || true
-RUN echo "gsqlite3-database=/data/pdns.sqlite3" >> /etc/powerdns/pdns.d/pdns.local.gsqlite3.conf
+RUN echo "gsqlite3-database=/data/pdns/pdns.sqlite3" >> /etc/powerdns/pdns.d/pdns.local.gsqlite3.conf
 
 VOLUME ["/data"]
 RUN ln -s /data/pdns.local.conf /etc/powerdns/pdns.d/z-pdns.local.conf
