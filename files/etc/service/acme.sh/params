@@ -1,0 +1,6 @@
+#!/bin/sh
+
+export PDNS_Url="http://localhost:8090"
+export PDNS_ServerId="localhost"
+export PDNS_Token="$(awk -F= -- '$1 == "api-key" { print $2 }' /data/pdns.local.conf)"
+export PDNS_Ttl=60
