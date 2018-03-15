@@ -1,0 +1,11 @@
+#!/bin/sh
+
+export PDNS_Url="http://localhost:8090"
+export PDNS_ServerId="localhost"
+export PDNS_Token="$(awk -F= -- '$1 == "api" { print $2 }' /data/pdns.local.conf)"
+export PDNS_Ttl=60
+
+while :; do
+    /root/.acme.sh/acme.sh --cron --home "/root/.acme.sh/"
+    sleep 3600
+done
