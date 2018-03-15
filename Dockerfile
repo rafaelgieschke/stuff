@@ -23,10 +23,11 @@ RUN ln -s /data/pdns.local.conf /etc/powerdns/pdns.d/z-pdns.local.conf
 
 RUN \
   cd /tmp && \
-  git clone https://github.com/Neilpang/acme.sh && \
+  # git clone https://github.com/Neilpang/acme.sh && \
+  git clone https://github.com/rafaelgieschke/acme.sh && \
   cd acme.sh && \
   ./acme.sh --install --force && \
-  true
+  true 3
 
 EXPOSE 53/udp 53/tcp
 EXPOSE 8081
