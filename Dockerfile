@@ -5,7 +5,7 @@ CMD ["/sbin/my_init"]
 
 RUN apt-get -y update && apt-get install \
   git \
-  nginx \
+  nghttp2-proxy \
   pdns-backend-sqlite3 \
   pdns-server \
   ssl-cert \
