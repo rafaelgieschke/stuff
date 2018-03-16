@@ -1,0 +1,10 @@
+version: "2"
+services:
+  .:
+    ports:
+      - 8090:80
+    volumes:
+      - ./www:/var/www/html
+    image: b9911734-2e2d-454d-83f8-b41a5f2eb7df
+    build: .
+
