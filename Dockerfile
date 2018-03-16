@@ -22,11 +22,12 @@ VOLUME ["/data"]
 RUN ln -s /data/pdns.local.conf /etc/powerdns/pdns.d/z-pdns.local.conf
 
 RUN \
+  mkdir -p /data/acme.sh && \
   cd /tmp && \
   # git clone https://github.com/Neilpang/acme.sh && \
   git clone https://github.com/rafaelgieschke/acme.sh && \
   cd acme.sh && \
-  ./acme.sh --install --force && \
+  ./acme.sh --install --config-home /data/acme.sh && \
   true 5
 
 EXPOSE 53/udp 53/tcp
