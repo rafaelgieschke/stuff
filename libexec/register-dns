@@ -1,0 +1,16 @@
+#!/bin/sh
+set -eu
+
+HERE="$(cd "$(dirname -- "$0")"; pwd)"
+. "$HERE"/dns-env
+
+DOMAIN="$1"
+IP="$2"
+
+DOMAIN="${DOMAIN%.}"
+
+curl -f -w "\n" -X PATCH -H "X-API-Key: $APIKEY" \
+  "$DNSSERVER"/api/v1/servers/localhost/zones/=2E -d \
+  '{"rrsets": [{"changetype": "REPLACE", "name": "'"$DOMAIN."'",
+    "type": "A", "ttl": 3600, "records":
+    [{"content": "'"$IP"'", "disabled": false}]}]}'
