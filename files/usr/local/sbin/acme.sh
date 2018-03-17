@@ -8,4 +8,4 @@ export Le_DNSSleep=5
 export DEPLOY_NGHTTPX_RELOAD="sv reload nghttpx"
 
 export LE_CONFIG_HOME="/data/acme.sh"
-exec /root/.acme.sh/acme.sh "$@"
+exec /root/.acme.sh/acme.sh --dns dns_pdns --deploy-hook nghttpx "$@"

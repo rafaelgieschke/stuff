@@ -28,7 +28,7 @@ RUN \
   git clone https://github.com/rafaelgieschke/acme.sh && \
   cd acme.sh && \
   ./acme.sh --install --config-home /data/acme.sh && \
-  true 5
+  true 2018-03-17-v8
 
 EXPOSE 53/udp 53/tcp
 EXPOSE 8081
