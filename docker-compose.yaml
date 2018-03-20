@@ -1,0 +1,9 @@
+version: "2"
+services:
+  .:
+    image: hashicorp/packer
+    entrypoint: []
+    working_dir: /data
+    command: /data/build
+    volumes:
+    - ./:/data
