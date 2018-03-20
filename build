@@ -1,0 +1,11 @@
+#!/bin/sh
+set -eu
+
+HERE="$(cd "$(dirname -- "$0")"; pwd)"
+. "$HERE"/credentials
+
+export TENANT
+export USERNAME
+export PASSWORD
+
+packer build bwcloud.json

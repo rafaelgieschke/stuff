@@ -1,0 +1,29 @@
+{
+  "variables": {
+    "tenant": "{{env `TENANT`}}",
+    "username": "{{env `USERNAME`}}",
+    "password": "{{env `PASSWORD`}}"
+  },
+  "builders": [
+    {
+      "type": "openstack",
+      "identity_endpoint": "https://bwcloud.ruf.uni-freiburg.de:5000/v2.0",
+      "tenant_name": "{{user `tenant`}}",
+      "domain_name": "Default",
+      "username": "{{user `username`}}",
+      "password": "{{user `password`}}",
+      "networks": ["d017ffbd-bffb-4c66-a218-ff6dbd76d11d"],
+      "region": "Freiburg",
+      "ssh_username": "ubuntu",
+      "image_name": "eaas-test",
+      "source_image_name": "Ubuntu Server 16.04 RAW",
+      "flavor": "m1.tiny"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "./install.sh"
+    }
+  ]
+}
