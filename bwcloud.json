@@ -12,7 +12,9 @@
       "domain_name": "Default",
       "username": "{{user `username`}}",
       "password": "{{user `password`}}",
-      "networks": ["d017ffbd-bffb-4c66-a218-ff6dbd76d11d"],
+      "networks": [
+        "d017ffbd-bffb-4c66-a218-ff6dbd76d11d"
+      ],
       "region": "Freiburg",
       "ssh_username": "ubuntu",
       "image_name": "eaas-test",
@@ -21,6 +23,12 @@
     }
   ],
   "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "echo bwcloud | sudo tee /provider"
+      ]
+    },
     {
       "type": "shell",
       "script": "./install.sh"
