@@ -8,7 +8,6 @@ RUN apt-get -y update && apt-get install \
   nghttp2-proxy \
   pdns-backend-sqlite3 \
   pdns-server \
-  ssl-cert \
   -y
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

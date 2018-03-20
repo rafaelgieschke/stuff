@@ -1,3 +1,9 @@
 #!/bin/sh
 
+if ! test -f "/etc/nghttpx/server.crt"; then
+  openssl req -x509 -subj "/" -newkey rsa:4096 -days 10000 -nodes \
+    -keyout "/etc/nghttpx/server.key" \
+    -out "/etc/nghttpx/server.crt"
+fi
+
 exec /usr/sbin/nghttpx
