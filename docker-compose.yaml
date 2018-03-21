@@ -1,0 +1,6 @@
+version: "2"
+services:
+  a:
+    build: ./sink/
+    ports:
+    - 8080:8080
