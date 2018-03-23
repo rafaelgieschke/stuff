@@ -19,5 +19,4 @@ export const endlessStream = new ReadableStream({
 
 export const ws = new WebSocketStream("ws:localhost:8080");
 
-setTimeout(() => 
-endlessStream.pipeTo(ws.writable), 1000);
+//setTimeout(() => endlessStream.pipeTo(ws.writable), 1000);

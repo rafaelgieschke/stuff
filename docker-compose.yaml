@@ -3,4 +3,10 @@ services:
   a:
     build: ./sink/
     ports:
-    - 8080:8080
+      - 8080:8080
+  nginx:
+    image: nginx
+    volumes:
+      - .:/usr/share/nginx/html
+    ports:
+      - 8090:80
