@@ -1,0 +1,21 @@
+version: "3.5"
+
+services:
+  nginx-proxy:
+    # image: neilpang/nginx-proxy
+    build: .
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./proxy/certs:/etc/nginx/certs
+      - ./proxy/acme:/acmecerts
+      - ./proxy/conf.d:/etc/nginx/conf.d
+    networks:
+      - web
+
+networks:
+  web:
+    driver: bridge
+    name: web
