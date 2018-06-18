@@ -1,0 +1,8 @@
+#!/bin/sh
+
+trap "kill -TERM -1" TERM
+
+/test &
+/test &
+
+while ! wait; do :; done

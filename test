@@ -1,0 +1,4 @@
+#!/bin/sh
+
+trap "echo TERM" TERM
+while ! sleep 10; do :; done
