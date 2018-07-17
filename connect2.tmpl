@@ -1,0 +1,11 @@
+{{ $CurrentContainer := where $ "ID" .Docker.CurrentContainerID | first }}
+
+
+{{ $ }}
+{{ $TargetContainer := where $ "Name" "nginxproxy_nginx_1" }}
+
+
+{{ range $container := . }}
+# docker connect '{{ replace ($container.Networks | first).Name "'" "'\"'\"'" -1 }}' '{{ replace $.Docker.CurrentContainerID "'" "'\"'\"'" -1 }}'
+curl --unix-socket /tmp/docker.sock -H "content-type: application/json" -d '{"Container":"{{ replace $TargetContainer.ID "'" "'\"'\"'" -1 }}"}' http://localhost/networks/'{{ replace ($container.Networks | first).Name "'" "'\"'\"'" -1 }}'/connect
+{{ end }}
