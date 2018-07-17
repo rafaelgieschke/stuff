@@ -1,0 +1,8 @@
+version: "2"
+services:
+ webdav:
+  ports:
+  - 8090:80
+  volumes:
+  - ./media:/media
+  image: sashgorokhov/webdav
