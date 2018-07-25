@@ -39,6 +39,10 @@ actions:
 
   - action: run
     chroot: true
+    command: echo "root:root" | chpasswd
+
+  - action: run
+    chroot: true
     command: update-grub; sed -i s+/dev/vda1+/dev/sda1+g /boot/grub/grub.cfg
 
   - action: run
