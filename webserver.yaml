@@ -1,0 +1,45 @@
+architecture: amd64
+
+actions:
+  - action: debootstrap
+    suite: "stable"
+    components:
+      - main
+      - contrib
+      - non-free
+    mirror: https://deb.debian.org/debian
+    variant: minbase
+
+  - action: image-partition
+    imagename: webserver.img
+    imagesize: 1GB
+    partitiontype: msdos
+    mountpoints:
+      - mountpoint: /
+        partition: root
+    partitions:
+      - name: root
+        fs: ext4
+        start: 1MiB
+        end: 100%
+        flags: [boot]
+
+  - action: filesystem-deploy
+    
+  - action: apt
+    packages:
+      - grub-pc
+      - linux-image-amd64
+      - initramfs-tools
+
+  - action: run
+    chroot: true
+    command: update-grub; sed -i s+/dev/vda1+/dev/sda1+g /boot/grub/grub.cfg
+
+  - action: run
+    chroot: true
+    command: grub-install --target=i386-pc /dev/vda
+
+  - action: apt
+    packages:
+      - apache2

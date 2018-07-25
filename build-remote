@@ -1,0 +1,10 @@
+#!/bin/bash
+set -eux
+
+SERVER="$1"
+SCRIPT="$2"
+
+TMPPATH="/tmp/$RANDOM$RANDOM$RANDOM"
+ssh "$SERVER" mkdir -p "$TMPPATH"
+rsync "$SCRIPT" "$SERVER":"$TMPPATH/debos.yaml"
+ssh "$SERVER" "~/go/bin/debos" "$TMPPATH/debos.yaml"
