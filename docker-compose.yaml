@@ -1,0 +1,9 @@
+version: "2"
+services:
+  build:
+    command: debos webserver.yaml
+    build: .
+    privileged: true
+    working_dir: /mnt
+    volumes:
+    - .:/mnt
