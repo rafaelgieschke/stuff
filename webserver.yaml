@@ -35,6 +35,10 @@ actions:
 
   - action: run
     chroot: true
+    command: sed -i /GRUB_TIMEOUT/cGRUB_TIMEOUT=0 /etc/default/grub
+
+  - action: run
+    chroot: true
     command: update-grub; sed -i s+/dev/vda1+/dev/sda1+g /boot/grub/grub.cfg
 
   - action: run
