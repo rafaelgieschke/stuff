@@ -31,6 +31,7 @@ actions:
       - grub-pc
       - linux-image-amd64
       - initramfs-tools
+      - systemd-sysv
 
   - action: run
     chroot: true
