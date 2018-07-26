@@ -43,7 +43,7 @@ actions:
 
   - action: run
     chroot: true
-    command: update-grub; sed -i s+/dev/vda1+/dev/sda1+g /boot/grub/grub.cfg
+    command: update-grub
 
   - action: run
     chroot: true
