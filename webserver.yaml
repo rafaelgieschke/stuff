@@ -12,7 +12,7 @@ actions:
 
   - action: image-partition
     imagename: webserver.img
-    imagesize: 1GB
+    imagesize: 2GB
     partitiontype: msdos
     mountpoints:
       - mountpoint: /
@@ -49,7 +49,22 @@ actions:
     chroot: true
     command: grub-install --target=i386-pc /dev/vda
 
+  - action: run
+    chroot: true
+    command: systemctl enable systemd-networkd
+
   - action: apt
     packages:
       - curl
       - apache2
+      - iproute2
+      - dnsutils
+
+  - action: overlay
+    source: overlay
+
+  - action: apt
+    packages:
+      - xorg
+      - chromium
+      - firefox-esr
