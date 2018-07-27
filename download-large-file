@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd -- "$(dirname -- "$0")"
+exec curl -o overlay/var/www/html/cat.jpg https://web.archive.org/web/20191014223349/https://live.staticflickr.com/5548/9520089661_2ec67d54c9_o.jpg
