@@ -59,6 +59,8 @@ actions:
       - apache2
       - iproute2
       - dnsutils
+      - tcpdump
+      - wireshark
 
   - action: overlay
     source: overlay
