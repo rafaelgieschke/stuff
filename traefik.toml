@@ -9,6 +9,13 @@ address = ":80"
 [entryPoints.http.redirect]
 entryPoint = "https"
 
+[file]
+[backends.invalid]
+[frontends.default]
+backend = "invalid"
+rule = "HostRegexp:{a:.*}"
+priority = -1
+
 [docker]
 endpoint = "unix:///var/run/docker.sock"
 domain = "invalid.invalid"
