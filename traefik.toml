@@ -1,0 +1,21 @@
+defaultEntryPoints = ["https", "http"]
+
+[entryPoints.https]
+address = ":443"
+[entryPoints.https.tls]
+
+[entryPoints.http]
+address = ":80"
+[entryPoints.http.redirect]
+entryPoint = "https"
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+domain = "invalid.invalid"
+
+[acme]
+email = "invalid@invalid.invalid"
+storage = "/acme/acme.json"
+entryPoint = "https"
+onHostRule = true
+[acme.tlsChallenge]
