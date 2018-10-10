@@ -19,6 +19,7 @@ priority = -1
 [docker]
 endpoint = "unix:///var/run/docker.sock"
 domain = "invalid.invalid"
+exposedByDefault = false
 
 [acme]
 email = "invalid@invalid.invalid"
