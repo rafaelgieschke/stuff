@@ -1,0 +1,6 @@
+{
+  "main": "index.js",
+  "dependencies": {
+    "ws": "^6.1.0"
+  }
+}
