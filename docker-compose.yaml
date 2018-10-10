@@ -3,7 +3,7 @@ networks: {web: {name: web}}
 
 services:
   web:
-    image: traefik
+    build: build
     ports:
       - 443:443
       - 80:80
