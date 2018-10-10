@@ -1,0 +1,10 @@
+version: "2.1"
+networks: {web: {name: web}}
+
+services:
+  whoami:
+    image: emilevauge/whoami
+    labels:
+      traefik.enable: true
+      traefik.frontend.rule: Host:change.example
+    networks: [web]
