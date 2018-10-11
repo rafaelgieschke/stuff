@@ -83,11 +83,18 @@ static int hello_read(const char *path, char *buf, size_t size, off_t offset,
 	return size;
 }
 
+static void hello_destroy(void* p) {
+	printf("destroy sleep\n");
+	sleep(3);
+	printf("destroy\n");
+}
+
 static struct fuse_operations hello_oper = {
 	.getattr	= hello_getattr,
 	.readdir	= hello_readdir,
 	.open		= hello_open,
 	.read		= hello_read,
+	.destroy = hello_destroy,
 };
 
 int main(int argc, char *argv[])
