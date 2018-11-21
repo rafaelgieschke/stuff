@@ -1,0 +1,22 @@
+#!/bin/sh
+set -xeu
+
+REF="$1"
+FILTER="$2"
+
+OLD="$(git show-ref -s "$REF")"
+OLDTREE="$(git cat-file -p "$REF" | head -n 1 | cut -d" " -f2)"
+NEWTREE="$(git ls-tree "$REF" | grep -Ev "$FILTER" | git mktree)"
+if test "$OLDTREE" != "$NEWTREE"; then
+  NEW1="$(GIT_AUTHOR_NAME="Bot" GIT_AUTHOR_EMAIL="invalid@invalid.invalid" git commit-tree "$NEWTREE" -p "$OLD" -m "Delete $FILTER (${REF##*/})")"
+  git update-ref "$REF" "$NEW1"
+fi
+
+OLD="$(git show-ref -s "$REF")"
+NEW="$(git cat-file -p "$REF" | grep -v '^parent ' | git hash-object -t commit --stdin -w)"
+
+git update-ref -m "Cut history" "$REF" "$NEW" "$OLD"
+git replace "$NEW" "$OLD"
+
+echo Do not forget to run:
+echo git push target "refs/replace/*:refs/replace/*"
