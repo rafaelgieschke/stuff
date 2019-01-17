@@ -1,6 +1,11 @@
 #!/bin/sh
 
-trap "kill -TERM -1" TERM
+# trap "kill -TERM -1" TERM
+
+# Will not work on dash:
+# trap 'kill -TERM $(jobs -p)' TERM
+
+trap 'pkill -TERM -P $$' TERM
 
 /test &
 /test &
