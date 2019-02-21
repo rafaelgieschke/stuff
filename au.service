@@ -2,10 +2,12 @@
 Description=Autobrightness of display
 
 [Service]
-ExecStart=/usr/bin/env ddcutil -d 1 vcpinfo 66
-ExecStart=/usr/bin/env ddcutil -d 1 getvcp 66
+#ExecStart=/usr/bin/env ddcutil -d 1 vcpinfo 66
+#ExecStart=/usr/bin/env ddcutil -d 1 getvcp 66
 ExecStart=/usr/bin/env ddcutil -d 1 setvcp 66 02
-ExecStart=/usr/bin/env ddcutil -d 1 getvcp 66
+#ExecStart=/usr/bin/env ddcutil -d 1 getvcp 66
+ExecStart=/usr/bin/env ddcutil -d 1 setvcp 62 80
+#ExecStart=/usr/bin/env ddcutil -d 1 getvcp 62
 Type=oneshot
 
 [Install]
