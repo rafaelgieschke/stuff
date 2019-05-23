@@ -2,4 +2,9 @@
 
 DOCKER_IMAGE="${1-ubuntu}"
 
-docker cp "$(docker create "$DOCKER_IMAGE")":/ rootfs
+CONTAINER="$(docker create "$DOCKER_IMAGE")"
+
+docker cp "$CONTAINER":/ rootfs
+docker inspect "$CONTAINER" | jq -r '@sh "#!/bin/sh\nexport \(.[].Config.Env)\n\(.[].Config.Cmd)"' > rootfs/init
+chmod ugo+x rootfs/init
+docker rm "$CONTAINER"
