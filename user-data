@@ -1,6 +1,10 @@
 #!/bin/sh
 
-mount -t 9p -o trans=virtio,version=9p2000.L a /mnt
-cd /mnt
+mount "$(blkid | grep 'cidata\|CIDATA' | head -n 1 | cut -d : -f 1)" /mnt
+/mnt/rndaddtoentcnt 128
+umount /mnt
 
-# chroot /mnt
+mount -t 9p -o trans=virtio,version=9p2000.L a /mnt
+
+cd /mnt
+chroot /mnt /init

@@ -1,4 +1,6 @@
 #!/bin/sh
 
 DIR="$(cd -- "$(dirname -- "$0")"; pwd)"
-genisoimage -r -o "${1-cloud-init.iso}" -V cidata "$DIR"/user-data
+
+(cd "$DIR"/rndaddtoentcnt; make)
+genisoimage -r -o "${1-cloud-init.iso}" -V cidata "$DIR"/user-data "$DIR"/rndaddtoentcnt/rndaddtoentcnt

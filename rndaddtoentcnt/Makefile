@@ -1,0 +1,2 @@
+all: rndaddtoentcnt
+CFLAGS+=-static
