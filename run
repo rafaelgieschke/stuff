@@ -1,0 +1,10 @@
+#!/bin/sh
+
+DIR="$(cd -- "$(dirname -- "$0")"; pwd)"
+
+if ! test -f disk.img; then
+  curl -Lo disk.img 'https://gitlab.com/emulation-as-a-service/linux-container-base-image/-/jobs/artifacts/master/raw/disk.img?job=build'
+fi
+
+"$DIR"/create disk.iso
+qemu-system-x86_64 -enable-kvm -snapshot disk.img -cdrom disk.iso -display none -vga none -serial stdio -virtfs local,path=rootfs,mount_tag=a,security_model=none

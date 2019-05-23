@@ -1,0 +1,4 @@
+#!/bin/sh
+
+DIR="$(cd -- "$(dirname -- "$0")"; pwd)"
+genisoimage -r -o "${1-cloud-init.iso}" -V cidata "$DIR"/user-data
