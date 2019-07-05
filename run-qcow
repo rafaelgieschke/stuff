@@ -1,0 +1,34 @@
+#!/bin/sh
+set -eu
+set -x
+
+IMAGE="$1"
+ID="$(mktemp | tr -d /.)"
+
+if ! test -x lklfuse; then
+  curl -Lo lklfuse 'https://gitlab.com/emulation-as-a-service/lklfuse/-/jobs/artifacts/master/raw/lkl/lklfuse?job=build'
+  chmod +x lklfuse
+fi
+
+if ! test -x fuseqemu; then
+  curl -Lo fuseqemu 'https://gitlab.com/rafaelgieschke/fuseqemu/-/jobs/artifacts/master/raw/fuseqemu/fuseqemu?job=build'
+  chmod +x fuseqemu
+fi
+
+./fuseqemu "$IMAGE" image.dd &
+FUSEQEMU_PID="$!"
+while ! test -s image.dd; do sleep 1; done
+
+mkdir -p mnt
+./lklfuse -f -o type=ext4 image.dd mnt &
+LKLFUSE_PID="$!"
+while ! mountpoint mnt; do sleep 1; done
+
+cd mnt
+runc run "$ID"
+cd ..
+
+fusermount -u mnt
+wait "$LKLFUSE_PID"
+fusermount -u image.dd
+wait "$FUSEQEMU_PID"
