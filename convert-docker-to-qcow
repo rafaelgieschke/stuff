@@ -1,0 +1,46 @@
+#!/bin/sh
+set -eu
+set -x
+
+DOCKER_IMAGE="$1"
+IMAGE="docker://$DOCKER_IMAGE"
+
+if ! test -x cptofs; then
+  curl -Lo cptofs 'https://gitlab.com/emulation-as-a-service/lklfuse/-/jobs/artifacts/master/raw/lkl/cptofs?job=build'
+  chmod +x cptofs
+fi
+
+if ! test -x fuseqemu; then
+  curl -Lo fuseqemu 'https://gitlab.com/rafaelgieschke/fuseqemu/-/jobs/artifacts/master/raw/fuseqemu/fuseqemu?job=build'
+  chmod +x fuseqemu
+fi
+
+: "${IMAGE_CACHE=}"
+
+if test -z "$IMAGE_CACHE"; then
+  TMP_IMAGE="$(mktemp -d)"
+  IMAGE_ID="id"
+else
+  TMP_IMAGE="$IMAGE_CACHE"
+  mkdir -p "$TMP_IMAGE"
+  IMAGE_ID="$(mktemp -p "$TMP_IMAGE" | tr -d /.)"
+fi
+
+TMP_ROOTFS="$(mktemp -d)"
+
+skopeo copy "$IMAGE" oci:"$TMP_IMAGE":"$IMAGE_ID" >&2
+umoci unpack --image "$TMP_IMAGE:$IMAGE_ID" "$TMP_ROOTFS" >&2
+
+qemu-img create -f qcow2 image.qcow 1G
+
+./fuseqemu image.qcow image.dd &
+FUSEQEMU_PID="$!"
+while ! test -s image.dd; do sleep 1; done
+
+mkfs.ext4 image.dd
+./cptofs -t ext4 -i image.dd "$TMP_ROOTFS"/* /
+
+rm -rf "$TMP_ROOTFS"
+
+fusermount -u image.dd
+wait "$FUSEQEMU_PID"
