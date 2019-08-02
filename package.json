@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "version": "0.0.0",
+  "dependencies": {
+    "apple-icloud": "^1.0.0",
+    "password-prompt": "^1.1.2"
+  },
+  "devDependencies": {},
+  "scripts": {},
+  "type": "module"
+}
