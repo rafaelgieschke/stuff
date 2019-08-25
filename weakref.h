@@ -20,7 +20,10 @@ struct ref *get_ref(void *_Atomic *weakref) {
   char *old_weakref = (char *)*weakref;
   do {
     if (!old_weakref) return 0;
-    if (aligned_ref(old_weakref) != aligned_ref(old_weakref + 1)) continue;
+    if (aligned_ref(old_weakref) != aligned_ref(old_weakref + 1)) {
+      old_weakref = (char *)*weakref;
+      continue;
+    }
   } while (!atomic_compare_exchange_weak(weakref, (void **)&old_weakref,
                                          old_weakref + 1));
   struct ref *ref = aligned_ref(old_weakref)->ref;
