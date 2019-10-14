@@ -11,7 +11,9 @@ import {promisify} from "util";
 const defaultServers = ["stun.l.google.com:19302", "stun.sipgate.net"];
 
 class StunSocket {
-    socket = new dgram.Socket("udp4");
+    constructor() {
+        this.socket = new dgram.Socket("udp4");
+    }
     async request(server) {
         const res = await promisify(stun.request)(server, {socket: this.socket});
         return res.getXorAddress() || res.getAddress();
