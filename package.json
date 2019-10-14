@@ -1,0 +1,6 @@
+{
+ "type": "module",
+ "dependencies": {
+  "stun": "^2.0.0"
+ }
+}
