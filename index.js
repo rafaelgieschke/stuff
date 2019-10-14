@@ -10,6 +10,12 @@ import {promisify} from "util";
 
 const defaultServers = ["stun.l.google.com:19302", "stun.sipgate.net"];
 
+if (!Promise.prototype.finally) {
+  Promise.prototype.finally = function (f) {
+    return this.then(f, f);
+  };
+}
+
 class StunSocket {
     constructor() {
         this.socket = new dgram.Socket("udp4");
