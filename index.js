@@ -1,5 +1,7 @@
 #!/bin/sh
-true /*; exec node --experimental-modules "$0" "$@";*/
+true /*; NODE_PATH="$(dirname -- "$0")/node_modules" exec node -e \
+  'require("esm")(module)(require("path").resolve(process.cwd(),
+  process.argv[1]))' "$0" "$@"; */;
 
 import process from "process";
 import dgram from "dgram";
