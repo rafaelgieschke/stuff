@@ -32,4 +32,4 @@ const args = process.argv.slice(2);
     for (const {address, port} of [sock.address, ...req]) {
         console.log(`${address}:${port}`);
     }
-})().finally(() => process.exit());
+})().catch(console.error).finally(() => process.exit());
