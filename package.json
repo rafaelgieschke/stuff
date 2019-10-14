@@ -3,6 +3,9 @@
  "version": "0.0.1",
  "type": "module",
  "main": "index.js",
+ "scripts": {
+  "stuff": "./index.js"
+ },
  "dependencies": {
   "esm": "^3.2.25",
   "stun": "^2.0.0"
