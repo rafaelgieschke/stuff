@@ -9,14 +9,15 @@ true /*; exec node -r ts-node/register/transpile-only "$0" "$@";*/;
 
 import process from "process";
 import puppeteer from "puppeteer";
-import {promisify} from "util";
+import { promisify } from "util";
 import child_process from "child_process";
 const execFile = promisify(child_process.execFile);
-import {promises as fs} from "fs";
-const {stat} = fs;
+import { promises as fs } from "fs";
+const { stat } = fs;
 
 const EAAS_PROXY_PATH = "./eaas-proxy";
-const EAAS_PROXY_URL = "https://gitlab.com/emulation-as-a-service/eaas-proxy/-/jobs/artifacts/master/raw/eaas-proxy/eaas-proxy?job=build";
+const EAAS_PROXY_URL =
+    "https://gitlab.com/emulation-as-a-service/eaas-proxy/-/jobs/artifacts/master/raw/eaas-proxy/eaas-proxy?job=build";
 
 const [_url] = process.argv.slice(2);
 const url = new URL(_url);
@@ -64,7 +65,7 @@ class Page2 {
     }
     async click(
         string: string,
-        { before, after }: { before?: string; after?: string } = {}
+        { before, after }: { before?: string; after?: string } = {},
     ) {
         const obj = await (after
             ? this.waitForStringAfter(string, after)
@@ -87,7 +88,7 @@ const run = (command: string, args: string[] = []) => {
         process.on("error", reject);
         process.on("exit", resolve);
     });
-}
+};
 
 (async () => {
     const browser = await puppeteer.launch({ headless: false });
@@ -107,7 +108,7 @@ const run = (command: string, args: string[] = []) => {
     const eaasClient = await page.page.evaluateHandle(
         () =>
             angular.element(document.querySelector("[ui-view=wizard]")).scope()
-                .startEmuCtrl.eaasClient
+                .startEmuCtrl.eaasClient,
     );
 
     console.log(eaasClient);
@@ -117,11 +118,11 @@ const run = (command: string, args: string[] = []) => {
         return eaasClient.getProxyURL({
             serverIP: "10.0.0.1",
             serverPort: "23",
-            localPort: "8090"
+            localPort: "8090",
         });
     }, eaasClient);
     console.log(proxyURL);
-    if (!await stat(EAAS_PROXY_PATH).catch(()=>{})) {
+    if (!(await stat(EAAS_PROXY_PATH).catch(() => {}))) {
         await run("curl", ["-L", "-o", EAAS_PROXY_PATH, EAAS_PROXY_URL]);
         await run("chmod", ["+x", EAAS_PROXY_PATH]);
     }
