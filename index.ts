@@ -1,8 +1,22 @@
 #!/bin/sh
 true /*; exec node -r ts-node/register/transpile-only "$0" "$@";*/;
 
+/*const promisifyObject = (object: object) => new Proxy(object, {
+    get(...a) {
+        return promisify(Reflect.get(...a));
+    }
+});*/
+
 import process from "process";
 import puppeteer from "puppeteer";
+import {promisify} from "util";
+import child_process from "child_process";
+const execFile = promisify(child_process.execFile);
+import {promises as fs} from "fs";
+const {stat} = fs;
+
+const EAAS_PROXY_PATH = "./eaas-proxy";
+const EAAS_PROXY_URL = "https://gitlab.com/emulation-as-a-service/eaas-proxy/-/jobs/artifacts/master/raw/eaas-proxy/eaas-proxy?job=build";
 
 const [_url] = process.argv.slice(2);
 const url = new URL(_url);
@@ -65,6 +79,16 @@ class Page2 {
     }
 }
 
+const run = (command: string, args: string[] = []) => {
+    const process = child_process.spawn(command, args, {
+        stdio: "inherit",
+    });
+    return new Promise((resolve, reject) => {
+        process.on("error", reject);
+        process.on("exit", resolve);
+    });
+}
+
 (async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = new Page2(await browser.newPage());
@@ -97,5 +121,10 @@ class Page2 {
         });
     }, eaasClient);
     console.log(proxyURL);
+    if (!await stat(EAAS_PROXY_PATH).catch(()=>{})) {
+        await run("curl", ["-L", "-o", EAAS_PROXY_PATH, EAAS_PROXY_URL]);
+        await run("chmod", ["+x", EAAS_PROXY_PATH]);
+    }
+    await run(EAAS_PROXY_PATH, [proxyURL]);
     console.log("DONE");
 })();
