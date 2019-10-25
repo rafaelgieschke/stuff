@@ -7,10 +7,10 @@ true /*; exec node -r ts-node/register/transpile-only "$0" "$@";*/;
     }
 });*/
 
-import process from "process";
+import * as process from "process";
 import puppeteer from "puppeteer";
 import { promisify } from "util";
-import child_process from "child_process";
+import * as child_process from "child_process";
 const execFile = promisify(child_process.execFile);
 import { promises as fs } from "fs";
 const { stat } = fs;
