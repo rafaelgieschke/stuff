@@ -13,13 +13,14 @@ import { promisify } from "util";
 import * as child_process from "child_process";
 const execFile = promisify(child_process.execFile);
 import { promises as fs } from "fs";
+import { type } from "os";
 const { stat } = fs;
 
 const EAAS_PROXY_PATH = "./eaas-proxy";
 const EAAS_PROXY_URL =
     "https://gitlab.com/emulation-as-a-service/eaas-proxy/-/jobs/artifacts/master/raw/eaas-proxy/eaas-proxy?job=build";
 
-const [_url] = process.argv.slice(2);
+const [_url, command] = process.argv.slice(2);
 const url = new URL(_url);
 const { username, password } = url;
 
@@ -32,12 +33,18 @@ const startsWithI = (expr: string, string: string) =>
     ${xpathString(string.toLowerCase())}),
     ${xpathString(string.toLowerCase())})`;
 
-const xpathStartsWithI = (string: string) =>
-    `//text()[${startsWithI(".", string)}]/parent::*[
-      name(.)!="script" and name(.)!="style"]`;
+const xpathStartsWithI = (string: string | { localName: string }) =>
+    typeof string === "string"
+        ? `(//text()|//attribute::placeholder)[${startsWithI(
+              ".",
+              string,
+          )}]/parent::*[name(.)!="script" and name(.)!="style"]`
+        : `//descendant-or-self::*[name(.)=${xpathString(string.localName)}]`;
 
-const xpathStartsWithIAfter = (string: string, before: string) =>
-    `${xpathStartsWithI(before)}/following::*${xpathStartsWithI(string)}`;
+const xpathStartsWithIAfter = (
+    string: string | { localName: string },
+    before: string,
+) => `${xpathStartsWithI(before)}/following::*${xpathStartsWithI(string)}`;
 
 const xpathStartsWithIBefore = (string: string, after: string) =>
     `(${xpathStartsWithI(after)}/preceding::*${xpathStartsWithI(string)})
@@ -64,8 +71,11 @@ class Page2 {
         return this.page.waitForXPath(xpathStartsWithIBefore(string, after));
     }
     async click(
-        string: string,
-        { before, after }: { before?: string; after?: string } = {},
+        string: string | { localName: string },
+        {
+            before,
+            after,
+        }: { before?: string; after?: string; localName?: string } = {},
     ) {
         const obj = await (after
             ? this.waitForStringAfter(string, after)
@@ -77,6 +87,14 @@ class Page2 {
         await timeout(1000);
         obj.evaluate(v => ((v as HTMLElement).style.outline = "unset"));
         await obj.click();
+    }
+    async type(string: string) {
+        await this.page.keyboard.type(string);
+    }
+    async clickUntilGone(string: string) {
+        try {
+            for (;;) await this.click(string);
+        } catch {}
     }
 }
 
@@ -93,13 +111,30 @@ const run = (command: string, args: string[] = []) => {
 (async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = new Page2(await browser.newPage());
+    globalThis.page = page;
 
     await page.page.authenticate({ username, password });
     await page.page.goto(String(url), { waitUntil: "networkidle2" });
 
-    //  await page.click("import container");
-    //  await page.click("choose a runtime");
-    //  await page.click("docker");
+    if (command === "import") {
+        await page.click("import container");
+        await page.click("choose a runtime");
+        await page.click("docker");
+        await page.click("name:");
+        await page.type(
+            "registry.gitlab.com/emulation-as-a-service/experiments/fake-dns",
+        );
+        await page.click("image tag");
+        await page.type("debug-proxy-ia");
+        await page.click("start");
+        await page.clickUntilGone("importing image");
+        await page.click({ localName: "input" }, { after: "title" });
+        await page.type(`pywb ${new Date().toISOString()}`);
+        await page.click({ localName: "p" }, { after: "description" });
+        await page.type(".");
+        await page.click("ok");
+        return;
+    }
     await page.click("environments");
     await page.click("networks");
     await page.click("choose action", { before: "tracenoizer" });
@@ -128,4 +163,6 @@ const run = (command: string, args: string[] = []) => {
     }
     await run(EAAS_PROXY_PATH, [proxyURL]);
     console.log("DONE");
-})();
+})().catch(() => {
+    require("repl").start();
+});
