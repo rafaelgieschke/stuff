@@ -35,8 +35,11 @@ const startsWithI = (expr: string, string: string) =>
 
 const xpathStartsWithI = (string: string | { localName: string }) =>
     typeof string === "string"
-        ? `(//text()|//attribute::placeholder)[${startsWithI(
+        ? `//node()[self::text() and ${startsWithI(
               ".",
+              string,
+          )} or ${startsWithI(
+              "@placeholder",
               string,
           )}]/parent::*[name(.)!="script" and name(.)!="style"]`
         : `//descendant-or-self::*[name(.)=${xpathString(string.localName)}]`;
