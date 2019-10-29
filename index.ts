@@ -163,6 +163,11 @@ const run = (command: string, args: string[] = []) => {
     }
     await run(EAAS_PROXY_PATH, [proxyURL]);
     console.log("DONE");
-})().catch(() => {
-    require("repl").start();
-});
+})()
+    .catch(e => {
+        console.log(e);
+        throw e;
+    })
+    .catch(() => {
+        require("repl").start();
+    });
