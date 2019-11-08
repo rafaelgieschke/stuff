@@ -1,0 +1,6 @@
+version: "3"
+services:
+  xpra:
+    build: .
+    ports:
+    - "8080:8080"
