@@ -138,9 +138,12 @@ const run = (command: string, args: string[] = []) => {
         await page.click("ok");
         return;
     }
-    await page.click("environments");
-    await page.click("networks");
-    await page.click("choose action", { before: "tracenoizer" });
+    await page.click("machines");
+    await page.click("virtual machines");
+    await page.click("search");
+    const envName = "Office 97 + Windows 98 SE";
+    await page.type(envName);
+    await page.click("choose action", { before: envName });
     await page.click("run");
     await timeout(1000);
     const eaasClient = await page.page.evaluateHandle(
