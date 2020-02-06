@@ -1,0 +1,8 @@
+version: "2"
+
+services:
+  coturn:
+    build: coturn
+    ports:
+      - 9090:9090
+      - 9090:9090/udp
