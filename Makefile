@@ -1,1 +1,1 @@
-all: unix-is-listening
+all: test-sock-diag
