@@ -1,1 +1,1 @@
-all: unix-is-listening example-server
+all: unix-is-listening
