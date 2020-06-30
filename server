@@ -1,0 +1,8 @@
+#!/bin/sh
+
+mkdir -p virgl-socket
+
+# sudo apt install virgl-server
+# sudo dnf install virglrenderer-test-server
+
+unshare -rm sh -c 'mount --bind "$PWD"/virgl-socket /tmp && virgl_test_server'

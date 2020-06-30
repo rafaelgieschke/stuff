@@ -1,0 +1,5 @@
+#!/bin/sh
+
+docker build .
+
+docker run -p 8080:8080 -v "$PWD"/virgl-socket/:/virgl-socket/ -it --rm "$(docker build -q .)"
