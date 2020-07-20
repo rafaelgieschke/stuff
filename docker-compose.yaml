@@ -1,0 +1,23 @@
+version: "2.1"
+networks: {web: {name: web}}
+
+services:
+  web:
+    image: lucaslorentz/caddy-docker-proxy
+    ports:
+      - 443:443
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./data:/data
+    networks: [web]
+    # labels:
+    #   caddy.email: invalid@invalid.invalid
+
+  test1:
+    image: jwilder/whoami
+    networks: [web]
+    labels:
+      caddy: test1.localhost
+      caddy.tls: internal
+      caddy.reverse_proxy: "{{upstreams 8000}}"
