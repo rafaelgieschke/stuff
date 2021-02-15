@@ -1,24 +1,24 @@
 #!/usr/bin/env -S deno run --allow-net
 
+import configImport from "./CONFIG.js";
+const config = configImport as {
+  pdns_key: string;
+  domains: Record<string, { zoneId: string; token: string }>;
+};
+
 import { serve, ServerRequest } from "https://deno.land/std/http/server.ts";
 import { CloudlfareClient } from "./cloudflare-client.ts";
-import config from "./CONFIG.js";
 
-console.log(config);
-const domains = config.domains as Record<string, {zoneId: string, token: string}>;
+const xApiKey = config.pdns_key;
+const domains = config.domains;
 
 const d = (v: any) => (console.debug(v), v);
 
-const client = new CloudlfareClient(config.zoneId, config.token);
-console.log(await client.list());
-
 const server = serve({ hostname: "0.0.0.0", port: 8090 });
-
-const xApiKey = config.pdns_key;
 
 const getClient = (name: string) => {
   const domain = name.split(".").slice(-2).join(".");
-  const {zoneId, token} = domains[domain];
+  const { zoneId, token } = domains[domain];
   return new CloudlfareClient(zoneId, token);
 };
 
@@ -29,14 +29,16 @@ const createRecord = async (
   ttl: number = 1
 ) => {
   const client = getClient(name);
-  await client.createOrUpdateRecord(name, type, content, ttl);
+  console.log({ name, type, content, ttl });
+  const id = await client.createOrUpdateRecord(name, type, content, ttl);
   // HACK: Delete a ACME dns-01 challenge entry after a timeout
-  if (type === "TXT" && content.startsWith("_acme-challenge.")) {
-    setTimeout(() => {
+  if (type === "TXT" && name.startsWith("_acme-challenge.")) {
+    console.log("Temporary ACME dns-01 challenge entry:", id, name);
+    setTimeout(async () => {
       try {
-        client.deleteRecord(name, type);
+        await client.deleteId(id);
       } catch {}
-    }, 3600_000);
+    }, 100_000);
   }
 };
 
