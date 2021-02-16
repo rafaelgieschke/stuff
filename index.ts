@@ -1,6 +1,8 @@
-#!/usr/bin/env -S deno run --allow-net
+#!/usr/bin/env -S deno run --allow-net --allow-read=./CONFIG.js
 
-import configImport from "./CONFIG.js";
+const [configUrl = "./CONFIG.js"] = Deno.args;
+const configImport = await import(configUrl);
+
 const config = configImport as {
   pdns_key: string;
   domains: Record<string, { zoneId: string; token: string }>;
