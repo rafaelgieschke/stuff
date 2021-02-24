@@ -1,0 +1,5 @@
+#!/bin/sh -x
+
+trap "echo $0@$PWD: Received TERM" TERM
+
+_="$0@$PWD" sleep 1
