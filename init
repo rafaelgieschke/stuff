@@ -1,7 +1,13 @@
 #!/bin/sh -xeu
 
-trap 'echo "$0: Shutting down" >&2; ps -Af >&2' TERM INT HUP
-trap 'while pkill -eP "$$" >&2; do sleep 1; done' EXIT
+shutdown() {
+  trap - EXIT
+  echo "$0: Shutting down" >&2
+  ps -Af >&2
+  while pkill -eP "$$" >&2; do sleep 1; done
+}
+
+trap shutdown TERM INT HUP EXIT
 
 for s in /etc/my_init.d/*; do "$s" & wait; done
 runsvdir -P /etc/service & wait
