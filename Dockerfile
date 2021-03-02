@@ -1,14 +1,14 @@
-from ubuntu
-run apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --force-yes \
+FROM ubuntu
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     runit \
     cron \
     &&:
 
-copy init /init
-cmd ["/init"]
+COPY init /init
+CMD ["/init"]
 
-copy cron-service /etc/service/cron/run
+COPY cron-service /etc/service/cron/run
 
 # Example services
-copy example-runonce /etc/my_init.d/00_example
-copy example-service /etc/service/example/run
+COPY example-runonce /etc/my_init.d/00_example
+COPY example-service /etc/service/example/run
