@@ -5,6 +5,7 @@ shutdown() {
   echo "$0: Shutting down" >&2
   ps -Af >&2
   while pkill -eP "$$" >&2; do sleep 1; done
+  exit
 }
 
 trap shutdown TERM INT HUP EXIT
