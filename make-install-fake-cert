@@ -1,0 +1,19 @@
+#!/bin/sh -xeu
+
+name="fake"
+
+openssl req -x509 \
+  -newkey rsa:2048 -days 10000 -nodes \
+  -keyout "$name.key" -out "$name.crt" \
+  -subj "/CN=example.example" -config - << EOF
+distinguished_name=dn
+x509_extensions=ext
+[dn]
+[ext]
+subjectAltName=DNS:example.example,DNS:example2.example
+basicConstraints=critical,CA:false
+EOF
+
+openssl x509 -in "$name.crt" -text
+ln -s "$name.crt" /usr/local/share/ca-certificates/
+update-ca-certificates
