@@ -68,6 +68,9 @@ const handleRequest = async (request: ServerRequest) => {
       rrsets: [{ changetype, name, type, ttl, records: [{ content }] = [] }],
     } = json;
     console.log({ changetype, name, type, ttl, content });
+    // HACK: Cloudflare does not support TTL < 120
+    ttl = ttl && Math.max(ttl, 120) || undefined;
+    console.log({ ttl });
     name = name.replace(/\.$/, "");
     if (changetype === "REPLACE") await createRecord(name, type, content, ttl);
     if (changetype === "DELETE") await deleteRecord(name, type);
