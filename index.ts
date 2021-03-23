@@ -57,8 +57,33 @@ const handleRequest = async (request: ServerRequest) => {
   const url = new URL(request.url, "https://invalid.invalid/");
   const path = url.pathname.replace(/\/+$/, "");
   if (path === "/api/v1/servers/localhost/zones") {
-    const body = `[{"account": "", "dnssec": false, "id": "=2E", "kind": "Native", "last_check": 0, "masters": [], "name": ".", "notified_serial": 20190628, "serial": 0, "url": "api/v1/servers/localhost/zones/=2E"}]`;
-    return request.respond({ status: 200, body: `${body}\n` });
+    const body = [
+      {
+        account: "",
+        dnssec: false,
+        id: "=2E",
+        kind: "Native",
+        last_check: 0,
+        masters: [],
+        name: ".",
+        notified_serial: 20190628,
+        serial: 0,
+        url: "api/v1/servers/localhost/zones/=2E",
+      },
+      {
+        account: "",
+        dnssec: false,
+        id: "=2E",
+        kind: "Native",
+        last_check: 0,
+        masters: [],
+        name: "",
+        notified_serial: 20190628,
+        serial: 0,
+        url: "api/v1/servers/localhost/zones/=2E",
+      },
+    ];
+    return request.respond({ status: 200, body: `${JSON.stringify(body)}\n` });
   }
   if (request.method === "PATCH") {
     const json = JSON.parse(
