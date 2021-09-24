@@ -8,7 +8,7 @@ const config = configImport as {
   domains: Record<string, { zoneId: string; token: string }>;
 };
 
-import { serve, ServerRequest } from "https://deno.land/std/http/server.ts";
+import { serve, ServerRequest } from "https://deno.land/std/http/server_legacy.ts";
 import { CloudlfareClient } from "./cloudflare-client.ts";
 
 const xApiKey = config.pdns_key;
