@@ -2,6 +2,7 @@
 
 const getUrl = (dockerReference, type = "manifests") => {
   const defaultHostname = "index.docker.io";
+  if (dockerReference.startsWith("docker.io/")) dockerReference = dockerReference.replace("docker.io", defaultHostname);
   // const defaultHostname = "registry-1.docker.io";
   // https://github.com/distribution/distribution/blob/main/reference/reference.go
   const [domain, path, tag, digest] = dockerReference
