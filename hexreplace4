@@ -1,3 +1,3 @@
 #!/bin/sh -eu
 
-printf "$(printf '\\%o' $(printf '0x%s ' $3))" | dd of="$1" conv=notrunc bs=1 seek="$(tr "\\0-\\377$(printf '\\%o' $(printf '0x%s ' $2))" '[\n*256]\1-\11\13-\377' < "$1" | grep -Fabo "$(printf "$(printf '\\%o' $(printf '0x%s ' $2))" | tr "$(printf '\\%o' $(printf '0x%s ' $2))" '\1-\11\13-\377')" | cut -d: -f1)"
+printf "$(printf '\\%o' $(printf '0x%s ' $3))" | dd of="$1" conv=notrunc bs=1 seek="$(tr "\\0-\\377$(printf '\\%o' $(printf '0x%s\n' $2 | sort | uniq))" '[\n*256]\1-\11\13-\377' < "$1" | grep -Fabo "$(printf "$(printf '\\%o' $(printf '0x%s ' $2))" | tr "$(printf '\\%o' $(printf '0x%s\n' $2 | sort | uniq))" '\1-\11\13-\377')" | cut -d: -f1)"
