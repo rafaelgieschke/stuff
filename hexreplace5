@@ -1,0 +1,9 @@
+#!/bin/sh -eu
+
+tr='\0-\377'"$(printf '\\%o' $(printf '0x%s\n' $2 | sort | uniq))"
+tr2='[\n*256]\1-\11\13-\377'
+find="$(printf "$(printf '\\%o' $(printf '0x%s\n' $2))" | tr "$tr" "$tr2")"
+offset="$(tr "$tr" "$tr2" < "$1" | grep -Fabo "$find" | cut -d: -f1)"
+replace="$(printf '\\%o' $(printf '0x%s\n' $3))"
+
+printf "$replace" | dd of="$1" conv=notrunc bs=1 seek="$offset"
