@@ -1,0 +1,30 @@
+version: "2.1"
+networks: {web: {name: web}}
+
+services:
+  web:
+    image: lucaslorentz/caddy-docker-proxy
+    ports:
+      - 443:443
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data:/data
+    networks: [web]
+    # labels:
+    #   caddy.email: invalid@invalid.invalid
+
+  test1:
+    image: quay.io/keycloak/keycloak
+    networks: [web]
+    command: start
+    environment:
+      # https://www.keycloak.org/server/reverseproxy
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HOSTNAME_URL: https://$DOMAIN/auth/
+      KC_PROXY: edge
+      KC_HTTP_RELATIVE_PATH: /auth
+    labels:
+      caddy: $DOMAIN
+      caddy.reverse_proxy: "{{upstreams 8080}}"
