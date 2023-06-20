@@ -35,9 +35,9 @@ const timeout = time_ms => new Promise(r => setTimeout(r, time_ms));
 (async () => {
     const stunServers = args.length ? args : defaultServers;
     const sock = new StunSocket;
-    const req = await Promise.all(stunServers.map(v => sock.request(v)));
-    for (const {address, port} of [sock.address, ...req]) {
-        console.log(`${address}:${port}`);
+    const req = await Promise.all(stunServers.map(v => sock.request(v).then(v2 => [v, v2])));
+    for (const [server, {address, port}] of [["sock.address.alt", sock.address], ...req]) {
+        console.log(`${server} ${address}:${port}`);
     }
     fetch(`${udpProxy}?${new URLSearchParams({ip: req[0].address, port: req[0].port})}`);
     try {
