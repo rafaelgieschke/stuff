@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 
-import process from "process";
-import dgram from "dgram";
+import process from "node:process";
+import dgram from "node:dgram";
 import stun from "stun";
-import {promisify} from "util";
-import fetch from "node-fetch";
+import {promisify} from "node:util";
 
 const defaultServers = ["stun.l.google.com:19302", "stun.sipgate.net"];
-const udpProxy = "https://ebenda.org/temp/send-udp";
+const udpProxy = "https://ebenda.org/tmp/send-udp";
 
 if (!Promise.prototype.finally) {
   Promise.prototype.finally = function (f) {
