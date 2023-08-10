@@ -14,7 +14,7 @@ apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y docker-compo
 git clone https://github.com/rafaelgieschke/compose-unit
 compose-unit/install
 
-git clone -b keycloak-caddy https://github.com/rafaelgieschke/stuff keycloak-caddy
+git clone -b keycloak-caddy https://github.com/rafaelgieschke/keycloak keycloak-caddy
 printf 'DOMAIN=%s\n' "$domain" > keycloak-caddy/.env
 
 compose enable --now keycloak-caddy
