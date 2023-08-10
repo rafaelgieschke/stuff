@@ -1,0 +1,18 @@
+#!/bin/sh
+set -xeu
+
+: "${DOMAIN_SUFFIX=fr.bw-cloud-instance.org}"
+
+domain="$(cat /var/lib/cloud/data/instance-id).$DOMAIN_SUFFIX"
+hostnamectl hostname -- "${domain%%-*}"
+hostnamectl hostname --pretty -- "https://$domain $(hostnamectl hostname --pretty)"
+
+curl -fL https://github.com/emulation-as-a-service/cloud-init-update/raw/main/user-data | sh
+
+git clone https://github.com/rafaelgieschke/compose-unit
+compose-unit/install
+
+git clone -b keycloak-caddy https://github.com/rafaelgieschke/stuff keycloak-caddy
+printf 'DOMAIN=%s\n' "$domain" > keycloak-caddy/.env
+
+compose enable --now keycloak-caddy
