@@ -9,6 +9,8 @@ hostnamectl hostname --pretty -- "https://$domain $(hostnamectl hostname --prett
 
 curl -fL https://github.com/emulation-as-a-service/cloud-init-update/raw/main/user-data | sh
 
+apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y docker-compose
+
 git clone https://github.com/rafaelgieschke/compose-unit
 compose-unit/install
 
