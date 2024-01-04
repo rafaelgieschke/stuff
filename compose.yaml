@@ -1,0 +1,43 @@
+services:
+  traefik:
+    image: traefik
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.https.address=:443
+      - --entrypoints.http.address=:80
+      - --entrypoints.http.http.redirections.entryPoint.to=https
+      - --certificatesresolvers.tls.acme.tlschallenge=true
+      - --certificatesresolvers.tls.acme.storage=/acme/acme.json
+    labels:
+      - traefik.enable=true
+      - traefik.http.middlewares.hsts.headers.stsseconds=31536000
+      - traefik.http.middlewares.hsts.headers.stsincludesubdomains=true
+      - traefik.http.middlewares.hsts.headers.stspreload=true
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./acme:/acme
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - traefik
+
+  whoami:
+    image: traefik/whoami
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.$COMPOSE_PROJECT_NAME.tls.certresolver=tls
+      - traefik.http.routers.$COMPOSE_PROJECT_NAME.middlewares=hsts
+      - traefik.http.routers.$COMPOSE_PROJECT_NAME.rule=Host(
+          "test.example",
+          "test2.example",
+        ) && Path("/whoami")
+    networks:
+      - traefik
+      - internal
+
+networks:
+  traefik:
+    name: traefik
+  internal:
