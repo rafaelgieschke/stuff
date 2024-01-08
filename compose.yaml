@@ -4,13 +4,19 @@ services:
     command:
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
+      - --providers.docker.defaultRule={{ index .Labels "traefik.rule" }}
       - --entrypoints.https.address=:443
+      - --entrypoints.https.http.tls.certResolver=tls
+      - --entrypoints.https.http.middlewares=hsts
       - --entrypoints.http.address=:80
       - --entrypoints.http.http.redirections.entryPoint.to=https
       - --certificatesresolvers.tls.acme.tlschallenge=true
       - --certificatesresolvers.tls.acme.storage=/acme/acme.json
     labels:
       - traefik.enable=true
+      - traefik.http.services.traefik.loadbalancer.server.port=9999
+      - traefik.http.routers.traefik.entrypoints=http
+      - traefik.http.routers.traefik.rule=Host("invalid.invalid")
       - traefik.http.middlewares.hsts.headers.stsseconds=31536000
       - traefik.http.middlewares.hsts.headers.stsincludesubdomains=true
       - traefik.http.middlewares.hsts.headers.stspreload=true
@@ -26,10 +32,8 @@ services:
   whoami:
     image: traefik/whoami
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.$COMPOSE_PROJECT_NAME.tls.certresolver=tls
-      - traefik.http.routers.$COMPOSE_PROJECT_NAME.middlewares=hsts
-      - traefik.http.routers.$COMPOSE_PROJECT_NAME.rule=Host(
+      traefik.enable: true
+      traefik.rule: Host(
           "test.example",
           "test2.example",
         ) && Path("/whoami")
