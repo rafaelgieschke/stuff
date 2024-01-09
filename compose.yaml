@@ -3,6 +3,7 @@ services:
     image: traefik
     command:
       - --providers.docker=true
+      - --providers.docker.network=traefik
       - --providers.docker.exposedbydefault=false
       - --providers.docker.defaultRule={{ index .Labels "traefik.rule" }}
       - --entrypoints.https.address=:443
