@@ -15,7 +15,7 @@ services:
       - --certificatesresolvers.tls.acme.storage=/acme/acme.json
     labels:
       - traefik.enable=true
-      - traefik.http.services.traefik.loadbalancer.server.port=9999
+      - traefik.http.routers.traefik.service=noop@internal
       - traefik.http.routers.traefik.entrypoints=http
       - traefik.http.routers.traefik.rule=Host("invalid.invalid")
       - traefik.http.middlewares.hsts.headers.stsseconds=31536000
