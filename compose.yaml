@@ -8,7 +8,7 @@ services:
       - --providers.docker.defaultRule={{ index .Labels "traefik.rule" }}
       - --entrypoints.https.address=:443
       - --entrypoints.https.http.tls.certResolver=tls
-      - --entrypoints.https.http.middlewares=hsts
+      - --entrypoints.https.http.middlewares=hsts,no-www
       - --entrypoints.http.address=:80
       - --entrypoints.http.http.redirections.entryPoint.to=https
       - --certificatesresolvers.tls.acme.tlschallenge=true
@@ -21,6 +21,9 @@ services:
       - traefik.http.middlewares.hsts.headers.stsseconds=31536000
       - traefik.http.middlewares.hsts.headers.stsincludesubdomains=true
       - traefik.http.middlewares.hsts.headers.stspreload=true
+      - traefik.http.middlewares.no-www.redirectregex.regex=^https?://www.(.*)
+      - traefik.http.middlewares.no-www.redirectregex.replacement=https://$${1}
+      - traefik.http.middlewares.no-www.redirectregex.permanent=true
     ports:
       - 80:80
       - 443:443
