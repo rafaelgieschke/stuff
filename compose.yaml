@@ -8,7 +8,7 @@ services:
       - --providers.docker.defaultRule={{ index .Labels "traefik.rule" }}
       - --entrypoints.https.address=:443
       - --entrypoints.https.http.tls.certResolver=tls
-      - --entrypoints.https.http.middlewares=hsts,no-www
+      - --entrypoints.https.http.middlewares=hsts@docker,no-www@docker
       - --entrypoints.http.address=:80
       - --entrypoints.http.http.redirections.entryPoint.to=https
       - --certificatesresolvers.tls.acme.tlschallenge=true
