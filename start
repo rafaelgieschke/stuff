@@ -2,6 +2,6 @@
 cd -- "$(dirname -- "$0")"
 mkdir -p profile
 if ! test -e firefox; then
-  curl -L 'https://download.mozilla.org/?product=firefox-nightly-latest-l10n-ssl&os=linux64&lang=en-US' | tar xjv
+  curl -L 'https://download.mozilla.org/?product=firefox-nightly-latest-l10n-ssl&os=linux64&lang=en-US' | tar xJv
 fi
 firefox/firefox -profile profile -no-remote
